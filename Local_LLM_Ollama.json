@@ -1,0 +1,45 @@
+{
+  "name": "Local LLM via Ollama",
+  "nodes": [
+    {
+      "id": "1",
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "id": "2",
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "http://host.docker.internal:11434/api/generate",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "{\"model\": \"llama3\", \"prompt\": \"Tell me a knock knock joke?\", \"stream\": false}"
+      },
+      "name": "Call Ollama LLM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "id": "3",
+      "parameters": {
+        "functionCode": "return [{ json: { response: $json.response } }];"
+      },
+      "name": "Extract Response",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [750, 300]
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [[{ "node": "Call Ollama LLM", "type": "main", "index": 0 }]]
+    },
+    "Call Ollama LLM": {
+      "main": [[{ "node": "Extract Response", "type": "main", "index": 0 }]]
+    }
+  }
+}

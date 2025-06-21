@@ -17,3 +17,9 @@ docker run -d --name n8n \
 ``` sh
 docker-compose up -d
 ```
+
+- open n8n 
+
+```
+http://localhost:5678
+```
